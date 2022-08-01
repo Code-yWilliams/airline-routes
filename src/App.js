@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import data from './data.js';
+import data, { getAirlineById, getAirportByCode } from './data.js';
 import './App.css';
 
 const { routes, airlines, airports } = data;
