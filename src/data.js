@@ -1405,4 +1405,6 @@ export const getAirportByCode = (code) => {
   return airport.name;
 }
 
-export default {routes, airlines, airports};
+
+
+export default { routes, airlines, airports };

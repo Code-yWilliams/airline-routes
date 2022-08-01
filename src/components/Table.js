@@ -19,7 +19,7 @@ const Table = ({ className="table", columns=[{name: "columnName", property: "val
   const tableBodyRows = () => {
     return currentRows().map(row => {
       return (
-        <tr>
+        <tr key={JSON.stringify(row)}>
           {columns.map(col => {
             const dataProperty = col.property;
             const value = row[col.property];
