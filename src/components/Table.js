@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const Table = ({ className="table", columns=[{name: "columnName", property: "value" }], rows=[{id: 1, value: "cell"}], format=(_, val) => val }) => {
+const Table = ({ className="table", columns=[{name: "columnName", property: "value" }], rows=[{id: 1, value: "cell"}], perPage=25, format=(_, val) => val }) => {
+  const [currentPage, setCurrentPage] = useState(1);
 
   const tableHeaders = () => {
     return columns.map(col => {
@@ -8,9 +9,15 @@ const Table = ({ className="table", columns=[{name: "columnName", property: "val
     })
   }
 
+  const currentRows = () => {
+    const startIndex = (currentPage - 1) * perPage;
+    const endIndex = currentPage * perPage;
+    return rows.slice(startIndex, endIndex);
+  }
+
   // for each row, iterate over the column property names and use each one to format a table cell
   const tableBodyRows = () => {
-    return rows.map(row => {
+    return currentRows().map(row => {
       return (
         <tr>
           {columns.map(col => {
@@ -24,18 +31,52 @@ const Table = ({ className="table", columns=[{name: "columnName", property: "val
     });
   }
 
-  return (
-    <table className={className}>
-      <thead>
-        <tr>
-          {tableHeaders()}
-        </tr>
-      </thead>
+  const showingNofTotal = () => {
+    const start = ((currentPage - 1) * perPage) + 1;
+    const end = currentPage * perPage;
+    const total = rows.length
+    return (
+      <p>
+        {`Showing ${start} - ${end} of ${total}`}
+      </p>
+    )
+  }
 
-      <tbody>
-        {tableBodyRows()}
-      </tbody>
-    </table>
+  const isOnFirstPage = () => {
+    return currentPage === 1;
+  }
+
+  const isOnLastPage = () => {
+    return rows.length / perPage <= currentPage;
+  }
+
+  const prevPage = () => {
+    setCurrentPage(currentPage - 1);
+  }
+
+  const nextPage = () => {
+   setCurrentPage(currentPage + 1);
+  }
+
+  return (
+    <>
+      <table className={className}>
+        <thead>
+          <tr>
+            {tableHeaders()}
+          </tr>
+        </thead>
+
+        <tbody>
+          {tableBodyRows()}
+        </tbody>
+      </table>
+      <div className="pagination">
+        {showingNofTotal()}
+        <button id="btn-prev-page" disabled={isOnFirstPage()} onClick={() => prevPage()}>Previous Page</button>
+        <button id="btn-next-page" disabled={isOnLastPage()} onClick={() => nextPage()}>Next Page</button>
+      </div>
+    </>
   )
 }
 
