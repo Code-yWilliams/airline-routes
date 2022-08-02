@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Table from './components/Table';
 import Select from './components/Select';
+import Map from './components/Map';
 import DATA, { allAirportNames, allAirlineNames, getAirlineNameById, getAirportNameByCode } from './data.js';
 const { routes, airlines, airports } = DATA;
 
@@ -68,6 +69,7 @@ const App = () => {
         <h1 className="title">Airline Routes</h1>
       </header>
       <section>
+      <Map routes={filteredRoutes()}></Map>
         <p>
           <Select name="airlines" label="Show routes on:" options={allAirlineNames()} enabledOptions={filteredAirlines()} onChange={selectAirline}></Select>
           <Select name="airports" label="flying to or from:" options={allAirportNames()} enabledOptions={filteredAirports()} defaultValue="All" onChange={selectAirport}></Select>

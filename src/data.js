@@ -1417,4 +1417,8 @@ export const getAirportNameByCode = (code) => {
   return airport.name;
 }
 
+export const getAirportInfoByCode = (code) => {
+  return airports.find(airport => airport.code === code)
+}
+
 export default { routes, airlines, airports };
