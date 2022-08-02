@@ -7,6 +7,7 @@ const { routes, airlines, airports } = DATA;
 
 const App = () => {
   const [currentAirline, setCurrentAirline] = useState('All');
+  const [currentAirport, setCurrentAirport] = useState('All');
 
   const columns = [
     {name: 'Airline', property: 'airline'},
@@ -22,17 +23,23 @@ const App = () => {
     }
   }
 
+  const filteredRoutes = () => {
+    return routes.filter(route => {
+      return (
+        (currentAirline === 'All' || currentAirline === getAirlineById(route.airline)) &&
+        (currentAirport === 'All' || currentAirport === getAirportByCode(route.src) || currentAirport === getAirportByCode(route.dest))
+      )
+    })
+  }
+
   const selectAirline = (e) => {
     const airline = e.target.value;
     setCurrentAirline(airline);
   }
 
-  const filteredRoutes = () => {
-    return routes.filter(route => {
-      return (
-        (currentAirline === 'All' || currentAirline === getAirlineById(route.airline))
-      )
-    })
+  const selectAirport = (e) => {
+    const airport = e.target.value;
+    setCurrentAirport(airport);
   }
 
   return  (
@@ -42,6 +49,7 @@ const App = () => {
       </header>
       <section>
         <Select name="airlines" label="Show routes on:" options={airlines.map(a => a.name).concat('All')} onChange={selectAirline}></Select>
+        <Select name="airports" label="flying to or from:" options={airports.map(a => a.name).concat('All')} onChange={selectAirport}></Select>
         <Table className="routes-table" columns={columns} rows={filteredRoutes()} format={formatValue}></Table>
       </section>
     </div>
