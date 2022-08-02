@@ -30,6 +30,12 @@ const App = () => {
         (currentAirlineName === 'All' || currentAirlineName === getAirlineNameById(route.airline)) &&
         (currentAirportName === 'All' || currentAirportName === getAirportNameByCode(route.src) || currentAirportName === getAirportNameByCode(route.dest))
       )
+    }).sort((first, second) => {
+      if (getAirlineNameById(first.airline) < getAirlineNameById(second.airline)) {
+        return -1;
+      } else {
+        return 1;
+      }
     })
   }
 
