@@ -54,6 +54,15 @@ const App = () => {
     setCurrentAirport(airport);
   }
 
+  const resetFilters = () => {
+    const airlineSelector = document.querySelector('select[name="airlines"]');
+    const airportSelector = document.querySelector('select[name="airports"]');
+    [airlineSelector, airportSelector].forEach(selector => {
+      selector.value = "All";
+      selector.dispatchEvent(new Event('change', { bubbles: true }));
+    })
+  }
+
   return  (
     <div className="app">
       <header className="header">
@@ -62,6 +71,7 @@ const App = () => {
       <section>
         <Select name="airlines" label="Show routes on:" options={allAirlines()} onChange={selectAirline}></Select>
         <Select name="airports" label="flying to or from:" options={allAirports()} onChange={selectAirport}></Select>
+        <button onClick={resetFilters}>Show All Routes</button>
         <Table className="routes-table" columns={columns} rows={filteredRoutes()} format={formatValue}></Table>
       </section>
     </div>
