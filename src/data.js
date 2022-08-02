@@ -1395,16 +1395,26 @@ const airports = [
 
 ];
 
-export const getAirlineById = (id) => {
+export const allAirportNames = () => {
+  let all = airports.map(airport => airport.name);
+  all.sort().unshift('All');
+  return all;
+}
+
+export const allAirlineNames = () => {
+  const all = airlines.map(airline => airline.name);
+  all.sort().unshift('All');
+  return all;
+}
+
+export const getAirlineNameById = (id) => {
   const airline = airlines.find(airline => airline.id === id);
   return airline.name;
 }
 
-export const getAirportByCode = (code) => {
+export const getAirportNameByCode = (code) => {
   const airport = airports.find(airport => airport.code === code);
   return airport.name;
 }
-
-
 
 export default { routes, airlines, airports };

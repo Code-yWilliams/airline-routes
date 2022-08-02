@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './App.css';
 import Table from './components/Table';
 import Select from './components/Select';
-import DATA, { getAirlineById, getAirportByCode } from './data.js';
+import DATA, { allAirportNames, allAirlineNames, getAirlineNameById, getAirportNameByCode } from './data.js';
 const { routes, airlines, airports } = DATA;
 
 const App = () => {
-  const [currentAirline, setCurrentAirline] = useState('All');
-  const [currentAirport, setCurrentAirport] = useState('All');
+  const [currentAirlineName, setCurrentAirlineName] = useState('All');
+  const [currentAirportName, setCurrentAirportName] = useState('All');
 
   const columns = [
     {name: 'Airline', property: 'airline'},
@@ -17,41 +17,40 @@ const App = () => {
   
   const formatValue = (dataProperty, value) => {
     if (dataProperty === 'airline') {
-      return getAirlineById(value);
+      return getAirlineNameById(value);
     } else {
-      return getAirportByCode(value);
+      return getAirportNameByCode(value);
     }
   }
 
   const filteredRoutes = () => {
     return routes.filter(route => {
       return (
-        (currentAirline === 'All' || currentAirline === getAirlineById(route.airline)) &&
-        (currentAirport === 'All' || currentAirport === getAirportByCode(route.src) || currentAirport === getAirportByCode(route.dest))
+        (currentAirlineName === 'All' || currentAirlineName === getAirlineNameById(route.airline)) &&
+        (currentAirportName === 'All' || currentAirportName === getAirportNameByCode(route.src) || currentAirportName === getAirportNameByCode(route.dest))
       )
     })
   }
 
-  const allAirlines = () => {
-    const all = airlines.map(airline => airline.name);
-    all.sort().unshift('All');
-    return all;
+  const filteredAirlines = () => {
+    return filteredRoutes().map(route => getAirlineNameById(route.airline))
+                           .concat("All");
   }
 
-  const allAirports = () => {
-    let all = airports.map(airport => airport.name);
-    all.sort().unshift('All');
-    return all;
+  const filteredAirports = () => {
+    return filteredRoutes().map(route => [getAirportNameByCode(route.src), getAirportNameByCode(route.dest)])
+                           .flat()
+                           .concat("All");
   }
 
   const selectAirline = (e) => {
-    const airline = e.target.value;
-    setCurrentAirline(airline);
+    const airlineName = e.target.value;
+    setCurrentAirlineName(airlineName);
   }
 
   const selectAirport = (e) => {
-    const airport = e.target.value;
-    setCurrentAirport(airport);
+    const airportName = e.target.value;
+    setCurrentAirportName(airportName);
   }
 
   const resetFilters = () => {
@@ -69,9 +68,11 @@ const App = () => {
         <h1 className="title">Airline Routes</h1>
       </header>
       <section>
-        <Select name="airlines" label="Show routes on:" options={allAirlines()} onChange={selectAirline}></Select>
-        <Select name="airports" label="flying to or from:" options={allAirports()} onChange={selectAirport}></Select>
-        <button onClick={resetFilters}>Show All Routes</button>
+        <p>
+          <Select name="airlines" label="Show routes on:" options={allAirlineNames()} enabledOptions={filteredAirlines()} onChange={selectAirline}></Select>
+          <Select name="airports" label="flying to or from:" options={allAirportNames()} enabledOptions={filteredAirports()} defaultValue="All" onChange={selectAirport}></Select>
+          <button onClick={resetFilters}>Show All Routes</button>
+        </p>
         <Table className="routes-table" columns={columns} rows={filteredRoutes()} format={formatValue}></Table>
       </section>
     </div>
