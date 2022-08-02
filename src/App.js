@@ -32,6 +32,18 @@ const App = () => {
     })
   }
 
+  const allAirlines = () => {
+    const all = airlines.map(airline => airline.name);
+    all.sort().unshift('All');
+    return all;
+  }
+
+  const allAirports = () => {
+    let all = airports.map(airport => airport.name);
+    all.sort().unshift('All');
+    return all;
+  }
+
   const selectAirline = (e) => {
     const airline = e.target.value;
     setCurrentAirline(airline);
@@ -48,8 +60,8 @@ const App = () => {
         <h1 className="title">Airline Routes</h1>
       </header>
       <section>
-        <Select name="airlines" label="Show routes on:" options={airlines.map(a => a.name).concat('All')} onChange={selectAirline}></Select>
-        <Select name="airports" label="flying to or from:" options={airports.map(a => a.name).concat('All')} onChange={selectAirport}></Select>
+        <Select name="airlines" label="Show routes on:" options={allAirlines()} onChange={selectAirline}></Select>
+        <Select name="airports" label="flying to or from:" options={allAirports()} onChange={selectAirport}></Select>
         <Table className="routes-table" columns={columns} rows={filteredRoutes()} format={formatValue}></Table>
       </section>
     </div>

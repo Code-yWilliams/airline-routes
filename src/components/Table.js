@@ -33,8 +33,9 @@ const Table = ({ className="table", columns=[{name: "columnName", property: "val
 
   const showingNofTotal = () => {
     const start = ((currentPage - 1) * perPage) + 1;
-    const end = currentPage * perPage;
+    let end = currentPage * perPage;
     const total = rows.length
+    end = total < end ? total : end;
     return (
       <p>
         {`Showing ${start} - ${end} of ${total}`}
